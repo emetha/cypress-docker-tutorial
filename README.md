@@ -9,7 +9,7 @@ In contrast to the unit and integration testing you are not breaking down the ap
 Now that we have a better understanding of what E2E testing is, let's talk about some E2E frameworks next! 
 
 ## Cypress - a replacement for Selenium?
-When looking around for E2E testing tools, a common name that pops up is "Selenium". It is one of the more popular and oldest browser automation tools and is based on Java. However, Selenium is notorious for being difficult to write and a pain to install/set up. 
+When looking around for E2E testing tools, a common name that pops up is "Selenium". Due to it's popularity Selenium has been crowned as the king of E2E testing frameworks and has held this reign for a long time. However, Selenium is also notorious for being difficult to write and a pain to install/set up. 
 
 If you think that I am talking about trees when I talk about 'cypress' then great! It means that you have not heard about Cypress.io before and this is your first introduction to it. Cypress.io is an open-source framework built for end-end testing web apps. In comparison with Selenium, Cypress is relatively easy to install and set up. For this reason, it has started to gain traction with front-end developers that want to implement testing in their web apps!
 
@@ -35,6 +35,8 @@ cypress-docker-example/
         |-- integration
             |-- spec.js             <--- the defined e2e tests 
 ```
+
+Note: the `master` branch only contains the README.md and Go web application. If you just want to quickly run this and extend on the tutorial project then check out the `completed` branch. All the configuration and tests from the tutorial are already created there!
 
 ## Run the Web App locally
 First and foremost, let's test that our web app works like it should and whether or not we can run our app in a Docker container.
@@ -115,9 +117,11 @@ Here, we have more things to unpack and we will go through the lines that are of
 image: "cypress/included:4.4.0"
 ```
 Cypress have provided their own [Docker images](https://docs.cypress.io/examples/examples/docker.html#Images) that we can build from. These images have Cypress already installed and there are various types:
+
 - `cypress/base:<node version>`: includes the dependencies that are required from the operating system to run Cypress.
 - `cypress/browsers:<tag>`: an extension of the base images where browsers are pre-installed.
 - `cypress/included:<cypress version>`: an extension of the base images where Cypress versions are pre-installed. 
+
 In our case, we have chosen to build from the version 4.4.0 of `cypress/included`, this is to make sure that Cypress executes tests as soon as its container starts up. 
 
 ```YAML
@@ -134,7 +138,77 @@ With this we can allow the Cypress container to send network requests to our app
 
 
 ### Writing our spec.js file
-Now comes the part we have all been waiting for... writing E2E tests! Since all our app does is re-direct the user to another page once they click on a button, the tests are relatively simple; check that we are on the correct page after the button has been clicked. 
+Now comes the part we have all been waiting for... writing E2E tests! Since all our app does is re-direct the user to another page once they click on a button, the tests are relatively simple: check that we are on the correct page after the button has been clicked. Let's take a look at how our spec.js will look like:
 
+```JavaScript
 
+it('Click home button', () => {
+  cy.visit('/')
 
+  cy.get('form').submit()
+
+  cy.get('.results p')
+    .should('contain', 'Thanks for clicking the button!')
+})
+
+it('Click back button', () => {
+  cy.visit('/results')
+
+  cy.get('form').submit()
+
+  cy.get('.container p')
+    .should('contain', 'Docker and Cypress Tutorial')
+})
+
+```
+
+The beauty of Cypress is how readable the Cypress API is. When I started learning about the Cypress framework I was surprised at how fast it was to grasp the API. So to breakdown what our tests in spec.js does:
+
+1. Navigates to the `/` path in our web app.
+
+```JavaScript
+
+cy.visit('/')
+
+```
+
+2. Find our button and submit/click it. This is done by searching for the sole `<form>` element on the page. 
+
+```JavaScript
+
+cy.get('form').submit()
+
+```
+
+3. Lastly, we tell Cypress to look after the text "Thanks for clicking the button!" in the `<p>` element under the `<div>` node that has the class `container`.
+
+```JavaScript
+
+ cy.get('.results p')
+    .should('contain', 'Thanks for clicking the button!')
+
+```
+
+## Running our tests
+Ok, so now that we have finished implementing our configurations and test files we need try running it! This is done with a simple `docker-compose` command:
+
+1. First go into the `e2e` directory
+
+```
+cd e2e
+```
+
+2. Run `docker-compose`
+```
+docker-compose up --exit-code-from cypress
+```
+
+`--exit-code-from cypress` simply tells `docker-compose` that when the tests pass it should exit with an exit code of zero, and a non-zero exit code when the test fails.
+
+Another cool feature of Cypress is that it can record every test run with a video. The videos can be found in `/cypress-docker-tutorial/e2e/cypress/video`. You can imagine how helpful this is when diagnosing test failures!
+
+## What's Next?
+Now that we have learned how dockerize Cypress as well as how we can use docker-compose to decouple our web app from the test framework. The next step would be to integrate your web app and docker set up with CI tools like Travis CI, Jenkins, Circle CI e.t.c. Cypress.io has great documentation and have even kindly provided us with [examples](https://docs.cypress.io/examples/examples/docker.html#Images) for integrating CI with docker and cypress. 
+
+## Conclusion
+Seeing that this is my first time working with E2E testing frameworks, I do find that Cypress holds true to it's word of being easy and fast to set up. Additionally, the Cypress API can be grasped quickly, seeing how readable it is. I do find it unfortunate that Cypress only works in the Chrome browser which I find a major drawback. Some also seem to find it frustrating that Cypress can only be written in JavaScript. But I disagree with this because JavaScript is essential when developing frontend. I believe that people who work with frontend will one way or another come across JavaScript - whether they like it or not.  
