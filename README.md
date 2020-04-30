@@ -62,6 +62,8 @@ Note: you might need to run the `docker` and `docker-compose` commands with `sud
 - `env PORT=1234`: set the port environment variable to 1234
 - `publish 1234:1234`: publish the container's 1234 port to the host's 1234 port.
 
+Now if you open a browser and enter `localhost:1234` you should see the web app up and running!
+
 ## Creating Our First Cypress E2E Test!
 There are three files we need to implement to start writing our Cypress E2E test: `cypress.json`, `docker-compose.yml`, and `integration/spec.js`.
 
