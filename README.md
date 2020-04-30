@@ -19,7 +19,13 @@ For developers that are experienced in working with Node.js, installing Cypress 
 In this tutorial, we will use `docker-compose` to run the Cypress tests in one container and the demo/tutorial app in another container. This way we can decouple our test framework from the app. 
 
 ## Simple Web App
-The tutorial app is very simple - the user clicks on the "Click Me!" button which will redirect the user to another page. When you have finished this tutorial your project layout should be the following:
+The tutorial app is very simple - the user clicks on the "Click Me!" button which will redirect the user to another page. 
+
+![screenshot 1](https://github.com/emetha/cypress-docker-tutorial/blob/master/screenshots/demo-app-1.png) 
+
+![screenshot 2](https://github.com/emetha/cypress-docker-tutorial/blob/master/screenshots/demo-app-2.png)
+
+When you have finished this tutorial your project layout should be the following:
 
 ```
 cypress-docker-example/
@@ -62,7 +68,7 @@ Note: you might need to run the `docker` and `docker-compose` commands with `sud
 - `env PORT=1234`: set the port environment variable to 1234
 - `publish 1234:1234`: publish the container's 1234 port to the host's 1234 port.
 
-Now if you open a browser and enter `localhost:1234` you should see the web app up and running!
+Now if you open a browser and enter `localhost:1234` you should see the web app up and running! 
 
 ## Creating Our First Cypress E2E Test!
 There are three files we need to implement to start writing our Cypress E2E test: `cypress.json`, `docker-compose.yml`, and `integration/spec.js`.
@@ -204,6 +210,10 @@ docker-compose up --exit-code-from cypress
 ```
 
 `--exit-code-from cypress` simply tells `docker-compose` that when the tests pass it should exit with an exit code of zero, and a non-zero exit code when the test fails.
+
+Your tests should all pass and you should see something like this:
+
+![screenshot 3](https://github.com/emetha/cypress-docker-tutorial/blob/master/screenshots/success-results.png)
 
 Another cool feature of Cypress is that it can record every test run with a video. The videos can be found in `/cypress-docker-tutorial/e2e/cypress/video`. You can imagine how helpful this is when diagnosing test failures!
 
