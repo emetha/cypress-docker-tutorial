@@ -53,7 +53,7 @@ First and foremost, let's test that our web app works like it should and whether
 
 Note: you might need to run the `docker` and `docker-compose` commands with `sudo`. 
 
-`docker build --tag simple-app`
+`docker build --tag simple-app .`
 
 4. To run our app in a docker container, we simply use the command: 
 
