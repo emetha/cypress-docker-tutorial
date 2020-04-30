@@ -1,4 +1,4 @@
-# cypress-docker-tutorial
+# Setting up Cypress with Docker
 A tutorial on setting up cypress to an application with docker
 
 ## What is E2E testing and Why?
@@ -18,11 +18,51 @@ Unfortunately, Cypress tests can only be written in JavaScript which means you w
 ## Not everyone has a Node.js stack or wants to...
 For developers that are experienced in working with Node.js, installing Cypress can be seen as something easy. However, for developers that work with Python or Go, having to use npm can be problematic. A solution would be to have a Docker image with Cypress pre-installed. 
 
+In this tutorial, we will use `docker-compose` to run the Cypress tests in one container and the demo/tutorial app in another container. This way we can decouple our test framework from the app. 
 
+## Simple Web App
+The tutorial app is a very simple - the user clicks on the "Click Me!" button which will re-direct the user to another page. The project layout is the following:
 
+```
+cypress-docker-example/
+|-- Dockerfile                      <--- docker file that will tell how to run the web app's container
+|-- main.go                         <--- src code for our little simple web app
+|-- e2e                             <--- folder that contains all the e2e tests
+    |-- docker-compose.yml          <--- docker-compose file that will link the two containers together
+    |-- cypress.json                <--- cypress configurations
+    |-- cypress
+        |-- videos
+        |-- integration
+            |-- spec.js             <--- the defined e2e tests 
+```
 
+## Run the Web App locally
+First and foremost, let's test that our web app works like it should and whether or not we can run our app in a Docker container.
 
+1. Start with cloning the Github repository: 
 
+`git clone https://github.com/emetha/cypress-docker-tutorial.git`
 
+2. Go into your new project folder:
 
+`cd cypress-docker-tutorial`
 
+3. Now we want to build a Docker image and we will call it 'simple-app':
+
+Note: you might need to run the `docker` and `docker-compose` commands with `sudo`. 
+
+`docker build --tag simple-app`
+
+4. To run our app in a docker container, we simply use the command: 
+
+`docker run --interactive --tty --env PORT=1234 publish 1234:1234 simple-app`
+
+- `tty`: allocate a pseudo-TTY
+- `interactive`: keep STDIN open even if not attached
+- `env PORT=1234`: set the port environment variable to 1234
+- `publish 1234:1234`: publish the container's 1234 port to the host's 1234 port.
+
+## Creating Our First Cypress E2E Test!
+There are three files we need to implement to start writing our Cypress E2E test: cypress.json, docker-compose.yml and integration/spec.js.
+
+### Writing our cypress.json file
