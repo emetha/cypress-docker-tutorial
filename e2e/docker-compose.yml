@@ -3,13 +3,13 @@ services:
   simple-app:
     build: ../
     environment:
-      - PORT=8123
+      - PORT=1234
   cypress:
     image: "cypress/included:4.4.0"
     depends_on:
-      - hello-world
+      - simple-app
     environment:
-      - CYPRESS_baseUrl=http://simple-app:8123
+      - CYPRESS_baseUrl=http://simple-app:1234
     working_dir: /e2e
     volumes:
       - ./:/e2e
