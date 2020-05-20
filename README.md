@@ -1,4 +1,22 @@
 # Setting up Cypress with Docker
+
+A quick tutorial on setting up Cypress and Docker for your application! The tutorial requires the installation of [Docker](https://docs.docker.com/get-docker/) and [Docker Compose](https://docs.docker.com/compose/install/). 
+
+### Table of Contents
+  * [What is E2E testing and Why?](#what-is-e2e-testing-and-why)
+  * [Cypress - a replacement for Selenium?](#cypress---a-replacement-for-selenium)
+  * [Not everyone has a Node.js stack or wants to...](#not-everyone-has-a-nodejs-stack-or-wants-to)
+  * [Simple Web App](#simple-web-app)
+  * [Run the Web App locally](#run-the-web-app-locally)
+  * [Creating Our First Cypress E2E Test!](#creating-our-first-cypress-e2e-test)
+    + [Writing our cypress.json file](#writing-our-cypressjson-file)
+    + [Writing our docker-compose.yml file](#writing-our-docker-composeyml-file)
+    + [Writing our spec.js file](#writing-our-specjs-file)
+  * [Running our tests](#running-our-tests)
+  * [What's Next?](#whats-next)
+  * [Conclusion](#conclusion)
+
+
 ## What is E2E testing and Why?
 End-to-end testing (E2E testing for short) is a technique that aims at testing the flow of an application from "end to end". Or how I understood it - writing tests that try to mimic the way the users would interact with your application. 
 
@@ -54,8 +72,6 @@ First and foremost, let's test that our web app works as it should and whether o
 `cd cypress-docker-tutorial`
 
 3. Now we want to build a Docker image and we will call it 'simple-app':
-
-Note: you might need to run the `docker` and `docker-compose` commands with `sudo`. 
 
 `docker build --tag simple-app .`
 
